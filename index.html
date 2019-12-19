@@ -1,1 +1,121 @@
-fsa`
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Basic Embed</title>
+
+    <style>
+    button.buttonRed{
+        display:inline-block;
+        padding:0.3em 1.2em;
+        margin:0 0.1em 0.1em 0;
+        border:0.16em solid rgba(255,255,255,0);
+        border-radius:2em;
+        box-sizing: border-box;
+        text-decoration:none;
+        font-family:'Roboto',sans-serif;
+        font-weight:300;
+        color:#FFFFFF;
+        text-shadow: 0 0.04em 0.04em rgba(0,0,0,0.35);
+        text-align:center;
+        transition: all 0.2s;
+    }
+    button.buttonRed:hover{
+        border-color: rgba(255,255,255,1);
+    }
+
+    @media all and (max-width:30em){
+        button.buttonRed{
+            display:block;
+            margin:0.2em auto;
+        }
+    }
+    </style>
+    
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    
+    <script type="text/javascript" src="https://unpkg.com/amazon-quicksight-embedding-sdk@1.0.1/dist/quicksight-embedding-js-sdk.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+    <script type="text/javascript">
+        function embedDashboard(embedURL) {
+             var containerDiv = document.getElementById("dashboardContainer");
+             var params = {
+                url:embedURL,
+                container: containerDiv,
+                height: "800px",
+                width: "100%"
+            };
+            var dashboard = QuickSightEmbedding.embedDashboard(params);
+            dashboard.on('error', onError);
+            dashboard.on('load', onDashboardLoad);
+        }
+
+        function embedDashboardOriginal(){
+            var gatewayApiUrl = "https://7w8k9yr3n3.execute-api.us-east-1.amazonaws.com/getEmbedURL";
+            
+            $.ajax({
+                type: "GET",
+                url: gatewayApiUrl,      
+                contentType: "application/json",
+                dataType: "json",
+                crossDomain: true,
+                success: function(data, status) {
+                    console.log(data);
+                    //embedDashboard(data.EmbedUrl);
+                }
+            });
+        }
+
+        function clickGetDashboard() {
+            // document.getElementById("button").style.display = "none";
+            document.getElementById('button').click();
+        }
+    </script>
+
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $("button").click(function(e) {
+                e.preventDefault();
+                $.ajax({
+                    type: "GET",
+                    url: "https://18wptg9zq8.execute-api.us-east-1.amazonaws.com/test?role=READER&dashboardID=cc0b9a33-f445-4265-95a8-f8affe4b71fd&emailID=test@test.com&dashboardRegion=us-east-1&userType=IAM",
+ 
+                    success: function(result) {
+                        console.log(result);
+                        embedDashboard(result.EmbedUrl);
+                    },
+                    error: function(result) {
+                        alert('error');
+                        console.log(result);
+                    }
+                });
+            }); 
+        });
+
+        function removeBtn() {
+            let elem = document.getElementById('button');
+            elem.parentNode.removeChild(elem);
+        }
+    </script>
+</head>
+
+<!-- <body onload="embedDashboardOriginal()"> Problem with CORS error-->
+<!-- <body onload="clickGetDashboard()"> Problem with loading in other browsers (IE and Safari) -->
+<body>
+    <br>
+    <h1 class='text-center'>300 Selective dashboard</h1>
+    <p class='text-center'> It takes a few seconds for it to load after button click! </p>
+    
+    <div class='text-center'>
+        <button id="button" onclick="removeBtn()" class="buttonRed" style="background-color:#f14e4e"> Get Dashboard! </button>
+    </div>
+    
+    <br>
+    <div class='text-center'>
+        <div id="dashboardContainer"></div>
+    </div>
+
+</body>
+</html>
+
