@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Basic Embed</title>
+    <title>Basic QuickSight Embed</title>
 
     <style>
     button.buttonRed{
@@ -20,6 +20,7 @@
         text-align:center;
         transition: all 0.2s;
     }
+
     button.buttonRed:hover{
         border-color: rgba(255,255,255,1);
     }
@@ -36,7 +37,6 @@
     
     <script type="text/javascript" src="https://unpkg.com/amazon-quicksight-embedding-sdk@1.0.1/dist/quicksight-embedding-js-sdk.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-
     <script type="text/javascript">
         function embedDashboard(embedURL) {
              var containerDiv = document.getElementById("dashboardContainer");
@@ -46,30 +46,8 @@
                 height: "800px",
                 width: "100%"
             };
+
             var dashboard = QuickSightEmbedding.embedDashboard(params);
-            dashboard.on('error', onError);
-            dashboard.on('load', onDashboardLoad);
-        }
-
-        function embedDashboardOriginal(){
-            var gatewayApiUrl = "https://7w8k9yr3n3.execute-api.us-east-1.amazonaws.com/getEmbedURL";
-            
-            $.ajax({
-                type: "GET",
-                url: gatewayApiUrl,      
-                contentType: "application/json",
-                dataType: "json",
-                crossDomain: true,
-                success: function(data, status) {
-                    console.log(data);
-                    //embedDashboard(data.EmbedUrl);
-                }
-            });
-        }
-
-        function clickGetDashboard() {
-            // document.getElementById("button").style.display = "none";
-            document.getElementById('button').click();
         }
     </script>
 
@@ -79,7 +57,7 @@
                 e.preventDefault();
                 $.ajax({
                     type: "GET",
-                    url: "https://18wptg9zq8.execute-api.us-east-1.amazonaws.com/test?role=READER&dashboardID=cc0b9a33-f445-4265-95a8-f8affe4b71fd&emailID=test@test.com&dashboardRegion=us-east-1&userType=IAM",
+                    url: "<API GATEWAY URL>?<parameters>", // e.g role=READER&dashboardID=<qs dashboard id>&emailID=test@test.com&dashboardRegion=us-east-1&userType=IAM"
  
                     success: function(result) {
                         console.log(result);
@@ -100,11 +78,11 @@
     </script>
 </head>
 
-<!-- <body onload="embedDashboardOriginal()"> Problem with CORS error-->
+<!-- <body onload="embedDashboardOriginal()"> To Address the problem of CORSProblem with CORS error-->
 <!-- <body onload="clickGetDashboard()"> Problem with loading in other browsers (IE and Safari) -->
 <body>
     <br>
-    <h1 class='text-center'>300 Selective dashboard</h1>
+    <h1 class='text-center'>DASHBOARD TITLE</h1>
     <p class='text-center'> It takes a few seconds for it to load after button click! </p>
     
     <div class='text-center'>
@@ -118,4 +96,3 @@
 
 </body>
 </html>
-
